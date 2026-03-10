@@ -1,0 +1,19 @@
+
+name: 공고 자동 검사
+
+on:
+  schedule:
+    - cron: '30 0 * * *'  # 매일 한국시간 09:30 (UTC 00:30)
+  workflow_dispatch:  # 수동 실행 버튼
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: node scripts/check-jobs.js
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
